@@ -1675,22 +1675,42 @@ là function được truyền vào một function khác(là đối số)
 
 // console.log(document.forms['form-1']);
 
-var divBox1 = document.querySelector('.box-1');
-console.log(divBox1);
+// var divBox1 = document.querySelector('.box-1');
+// console.log(divBox1);
 
-// sử dụng element đã select để select đến element con của element đó
-var itemNodesBox1 = divBox1.querySelectorAll('ul > li');
-var selectbyTagName = divBox1.getElementsByTagName('li');
-console.log(itemNodesBox1);
-console.log(selectbyTagName);
-
-
-var divBox2 = document.querySelector('.box-2');
-console.log(divBox2);
-var getItemsBox2 = divBox2.getElementsByClassName('myItem');
-console.log(getItemsBox2);
+// // sử dụng element đã select để select đến element con của element đó
+// var itemNodesBox1 = divBox1.querySelectorAll('ul > li');
+// var selectbyTagName = divBox1.getElementsByTagName('li');
+// console.log(itemNodesBox1);
+// console.log(selectbyTagName);
 
 
+// var divBox2 = document.querySelector('.box-2');
+// console.log(divBox2);
+// var getItemsBox2 = divBox2.getElementsByClassName('myItem');
+// console.log(getItemsBox2);
 
+// var myHeading = document.querySelector('h1');
+// myHeading.setAttribute('Class-color', 'Orange');
+// myHeading.setAttribute('href', '#');
+// var getHeadingA = myHeading.getAttribute('class-color');
+// console.log(getHeadingA);
+// console.log(myHeading.getAttribute('class'));
+// myHeading.setAttribute('class-color', 'Blue');
+// console.log(myHeading.getAttribute('href'));
+// console.log(myHeading.className);
+
+
+// var myHeading2 = document.querySelector('h2');
+// var upperHeading = myHeading2.title.trim().toUpperCase();
+// console.log(upperHeading);
+// console.log(myHeading2.title.indexOf('2'));
+
+
+var f8LinkElement = document.querySelector('a');
+var f8ShortLink = f8LinkElement.href;
+f8LinkElement.nextElementSibling.href = f8ShortLink;
+
+console.log(f8LinkElement.nextElementSibling.text);
 
 
