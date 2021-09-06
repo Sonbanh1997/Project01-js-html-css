@@ -1707,10 +1707,51 @@ là function được truyền vào một function khác(là đối số)
 // console.log(myHeading2.title.indexOf('2'));
 
 
-var f8LinkElement = document.querySelector('a');
-var f8ShortLink = f8LinkElement.href;
-f8LinkElement.nextElementSibling.href = f8ShortLink;
+// var f8LinkElement = document.querySelector('a');
+// var f8ShortLink = f8LinkElement.href;
+// f8LinkElement.nextElementSibling.href = f8ShortLink;
 
-console.log(f8LinkElement.nextElementSibling.text);
+// console.log(f8LinkElement.nextElementSibling.text);
+
+
+var myHeading3 = document.querySelector('h3');
+
+//về cách lấy ra text node từ html
+
+//đối với innerText;
+// console.log(myHeading3.innerText); 
+
+/* kết quả:  Hoc lap trinh tai F8 */
+
+//đối với textContent
+// console.log(myHeading3.textContent);
+
+/* 
+kết quả:
+
+
+
+		Hoc lap trinh
+
+		tai F8
+	
+
+*/
+
+
+//Ve cách set phần tử
+
+myHeading3.textContent = `
+
+ Hoc Lap trinh
+
+ Tai Howkteam
+`;
+
+console.log(myHeading3.textContent);
+console.log(myHeading3.innerText);
+
+
+
 
 
