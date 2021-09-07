@@ -1714,7 +1714,7 @@ là function được truyền vào một function khác(là đối số)
 // console.log(f8LinkElement.nextElementSibling.text);
 
 
-var myHeading3 = document.querySelector('h3');
+// var myHeading3 = document.querySelector('h3');
 
 //về cách lấy ra text node từ html
 
@@ -1741,17 +1741,43 @@ kết quả:
 
 //Ve cách set phần tử
 
-myHeading3.textContent = `
+// myHeading3.textContent = `
 
- Hoc Lap trinh
+//  Hoc Lap trinh
 
- Tai Howkteam
-`;
+//  Tai Howkteam
+// `;
 
-console.log(myHeading3.textContent);
-console.log(myHeading3.innerText);
-
-
+// console.log(myHeading3.textContent);
+// console.log(myHeading3.innerText);
 
 
 
+
+// mẹo xem các thuộc tính của node element, attribute node hoặc text node
+
+// var myHeading = document.querySelector('h1');
+// var myP = document.querySelector('.myPara');
+// var myDiv = document.querySelector('div');
+// console.log([myDiv]);
+// console.log(myDiv.firstChild.textContent);
+
+// var myContainer = document.querySelector('div');
+// console.log(myContainer.style);
+
+
+
+//Cách thêm nhiều style vào element mà không cần khai báo nhiều lần
+// Object.assign(myContainer.style, {
+// 	width: '300px',
+// 	height: '100px',
+// 	backgroundColor: 'green',
+// });
+
+var myHeading = document.querySelector('h1');
+myHeading.classList.add('redColor', 'blueColor', 'Black-color', '#');
+myHeading.classList.remove('#', 'Black-color', 'blueColor', '1');
+my
+
+console.log(myHeading);
+console.log(myHeading.classList);
