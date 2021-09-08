@@ -1774,10 +1774,126 @@ kết quả:
 // 	backgroundColor: 'green',
 // });
 
-var myHeading = document.querySelector('h1');
-myHeading.classList.add('redColor', 'blueColor', 'Black-color', '#');
-myHeading.classList.remove('#', 'Black-color', 'blueColor', '1');
-my
 
-console.log(myHeading);
-console.log(myHeading.classList);
+/* 
+==================================
+Classlist property
+
+
+add
+remove
+contains
+toggle
+
+
+*/
+
+var myHeading = document.querySelector('h1');
+
+
+//Them class vao element h1
+// myHeading.classList.add('redColor', 'blueColor', 'Black-color', '#');
+//xoa class element h1
+// myHeading.classList.remove('#', 'Black-color', 'blueColor', '1');
+
+// console.log(myHeading);
+
+// // kiem tra xem mot class co ton tai trong element h1 khong / kieu tra ve: boolean
+// console.log(myHeading.classList.contains('blueColor'));
+
+// // su dung toggle(kiem tra neu co class thi se xoa, neu khong co thi se tu them vao)
+
+// var a = setInterval(()=> {
+// 	myHeading.classList.toggle('red');
+// }, 3000)
+ 
+
+
+// ========================================================
+
+/* 
+DOM EVENT
+
+su dung Attribute event trong element tag
+
+gan(assgin) event cho element(su dung khi voi external file js)
+
+
+*/
+
+
+//Attribute Event
+/* 
+ cach 1 : <h2 onclick= 'console.log("myHeading2")'>myheading2</h2>
+
+
+ cach 2: gan function cho su kien(giong nhu mot callback khi click vao thi su kien se goi ham callback nay)
+
+ <h2 onclick= 'myFunc()'>myheading2</h2
+
+
+ function myFunc() {
+	 console.log('myHeading2')
+ }
+
+*/ 
+
+
+
+//Asign Event
+
+/* 
+html code: <h2>myheading2</h2>
+
+
+ var myHeading2 = document.querySelector('h2')
+ myHeading2.onclick = function(event) {
+	//bien event se nhan vao element Node goi den su kien onlick
+	console.log(event.target) // in ra element node  goi den event onclick nay
+ };
+*/
+
+// su dung Assign event gan event cho nhieu the h1
+
+/* html code
+
+<div>
+	<h1>Heading1</h1>
+	<h1>Heading2</h1>
+	<h1>Heading3</h1>
+</div>
+
+*/
+
+// var h1lists = document.querySelectorAll('h1');
+
+// for(var i = 0; i < h1lists.length; i++){
+// 	h1lists[i].onclick = function(e) {
+// 		console.log(e.target.style.backgroundColor = 'blue');
+// 	}
+// }
+
+// var myCheckBox = document.querySelector('input[type="checkbox"');
+// myCheckBox.onchange = function(e) {
+// 	if(e.target.checked){
+// 		console.log('checked');
+// 	} else {
+// 		console.log('unchecked');
+// 	}
+// }
+
+// var inputText = document.querySelector('input[type="text"');
+// console.log(inputText);
+// inputText.onkeydown = (e) => {
+// 	console.log(e.target.value);
+// }
+
+// document.onkeydown = function(e) {
+// 	console.log(e.key);
+// }
+
+// var mySelect = document.querySelector('select');
+// mySelect.onchange = (e) => {
+// 	console.log(e.target.value);
+// } 
+// console.log(mySelect);
