@@ -1897,3 +1897,151 @@ html code: <h2>myheading2</h2>
 // 	console.log(e.target.value);
 // } 
 // console.log(mySelect);
+
+
+
+/* 
+========================================
+PreventDefault() và stopPropagation()
+ngăn chặn thực thi sự kiện và ngăn chặn hiện tượng sủi bọt event
+
+
+
+*/
+
+
+// var myALists = document.links;
+// console.log(myALists);
+
+// for(var i = 0; i < myALists.length; i++){
+// 	myALists[i].onclick = function(event) {
+// 		console.log(event.target.href);
+// 		if(!event.target.href.startsWith('https://fullstack.edu.vn/')){
+// 			event.preventDefault();
+// 		}
+// 	}
+// }
+
+// var liItems = document.querySelectorAll('li');
+// console.log(liItems);
+
+// var UlElement = document.querySelector('ul');
+// UlElement.onmousedown = (e) => {
+// 	e.preventDefault();
+
+// }
+
+
+// for(var i = 0; i < liItems.length; i++){
+// 	liItems[i].onclick = (e) => {
+// 		console.log(e.target.innerText);
+// 	}
+// }
+
+
+// var myFirstA = document.querySelector('a');
+// console.log(myFirstA);
+// myFirstA.onclick = function(event) {
+// 	console.log(event.target.href);
+// }
+
+
+// var myDiv = document.querySelector('div');
+
+// var mybtn = document.querySelector('button');
+
+// myDiv.onclick = ()=> {
+// 	console.log('Div Parent');
+// }
+
+
+// mybtn.onclick = (e)=> {
+// 	e.stopPropagation();
+// 	console.log(e.target.innerText);
+// }
+
+
+
+
+/* 
+=======================================
+AddEventListener()
+
+*/
+
+// function getInnerText(event) {
+// 	event.stopPropagation();
+// 	console.log(event.target.innerText);
+// }
+
+// var firstHeading = document.querySelector('h1');
+
+
+
+// var btnAdd = document.querySelector('#addEvent');
+// var btnRemove = document.querySelector('#removeEvent');
+// btnAdd.onclick = (e)=> {
+// 	firstHeading.addEventListener('click', getInnerText);
+// 	setTimeout(()=>{
+// 		e.target.style.display = 'none';
+// 	}, 3000)
+// }
+
+// btnRemove.onclick = function() {
+// 	firstHeading.removeEventListener('click', getInnerText)
+// 	btnAdd.style.display = 'inline-block';
+// }
+
+
+
+
+
+/* 
+==========================================
+==============================
+================
+==========
+JavaScript Object Notation(JSON)
+JSON ==== JSON ==== JSON
+
+JSON ==== JSON ==== JSON
+JSON ==== JSON ==== JSON
+JSON ==== JSON ==== JSON
+
+
+//JSON là gì:
+ 	JSON là một định dạng dữ liễu(thể hiện các dữ liệu ở kiểu chuỗi)
+//Các kiểu dữ liệu có thể sử dụng trong JSON
+ 	Number,String,null,Boolean,Object,Array
+//Convert Javascript sang định dạng JSON
+JSON.stringify('javascript value')
+//Convert định dạng JSON sang Javascript
+JSON.Parse('JSON value')
+*/
+
+//Cách thể hiện một JSON
+
+var i = '1';
+var myName = '"Sơn Bành"';
+var isSuccessed = 'true';
+var z = 'null';
+var myArray = '["Javascript","PHP","GoLang"]';
+var myObj = '{"name":"Sơn Bành","age":18,"Coursecompleted":true,"Type":null}';
+
+//convert JSON sang Javascript(JSON.parse())
+console.log(JSON.parse(i)); //Number
+console.log(JSON.parse(myName)); //String
+console.log(JSON.parse(isSuccessed)); //Boolean
+console.log(JSON.parse(z)); //null
+console.log(JSON.parse(myArray)); //Array(type của Array Object)
+console.log(JSON.parse(myObj)); // Object
+
+
+//Convert Javascript sang JSON(JSON.stringify())
+console.log(JSON.stringify(1));
+console.log(JSON.stringify("Sơn Bành"));
+console.log(JSON.stringify(true));
+console.log(JSON.stringify(null));
+console.log(JSON.stringify(undefined));
+console.log(JSON.stringify(['PHP', 'Java', 'HTML5']));
+console.log(JSON.stringify({name: "Sơn Bành", age: 18, isCompleted: true, Type: null}))
