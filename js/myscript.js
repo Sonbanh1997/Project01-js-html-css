@@ -2021,29 +2021,135 @@ JSON.Parse('JSON value')
 
 //Cách thể hiện một JSON
 
-var i = '1';
-var myName = '"Sơn Bành"';
-var isSuccessed = 'true';
-var z = 'null';
-var myArray = '["Javascript","PHP","GoLang"]';
-var myObj = '{"name":"Sơn Bành","age":18,"Coursecompleted":true,"Type":null}';
+// var i = '1';
+// var myName = '"Sơn Bành"';
+// var isSuccessed = 'true';
+// var z = 'null';
+// var myArray = '["Javascript","PHP","GoLang"]';
+// var myObj = '{"name":"Sơn Bành","age":18,"Coursecompleted":true,"Type":null}';
 
-//convert JSON sang Javascript(JSON.parse())
-console.log(JSON.parse(i)); //Number
-console.log(JSON.parse(myName)); //String
-console.log(JSON.parse(isSuccessed)); //Boolean
-console.log(JSON.parse(z)); //null
-console.log(JSON.parse(myArray)); //Array(type của Array Object)
-console.log(JSON.parse(myObj)); // Object
+// //convert JSON sang Javascript(JSON.parse())
+// console.log(JSON.parse(i)); //Number
+// console.log(JSON.parse(myName)); //String
+// console.log(JSON.parse(isSuccessed)); //Boolean
+// console.log(JSON.parse(z)); //null
+// console.log(JSON.parse(myArray)); //Array(type của Array Object)
+// console.log(JSON.parse(myObj)); // Object
 
 
-//Convert Javascript sang JSON(JSON.stringify())
-console.log(JSON.stringify(1));
-console.log(JSON.stringify("Sơn Bành"));
-console.log(JSON.stringify(true));
-console.log(JSON.stringify(null));
-console.log(JSON.stringify(undefined));
-console.log(JSON.stringify(['PHP', 'Java', 'HTML5']));
-console.log(JSON.stringify({name: "Sơn Bành", age: 18, isCompleted: true, Type: null}))
+// //Convert Javascript sang JSON(JSON.stringify())
+// console.log(JSON.stringify(1));
+// console.log(JSON.stringify("Sơn Bành"));
+// console.log(JSON.stringify(true));
+// console.log(JSON.stringify(null));
+// console.log(JSON.stringify(undefined));
+// console.log(JSON.stringify(['PHP', 'Java', 'HTML5']));
+// console.log(JSON.stringify({name: "Sơn Bành", age: 18, isCompleted: true, Type: null}))
 
-var a = 1;
+
+
+//Callback hell trong promise hay còn gọi là pyramid of doom
+// setTimeout(()=>{
+// 	console.log(1);
+// 	setTimeout(()=>{
+// 		console.log(2);
+// 		setTimeout(()=>{
+// 			console.log(3);
+// 			setTimeout(()=>{
+// 				console.log(4);
+// 			}, 1000)
+// 		}, 1000)
+// 	}, 1000)
+// }, 1000)
+
+
+
+/* 
+=================================================
+Promise lý thuyết và thực hành
+khởi tạo một Promise với từ khóa new Promise(gọi đến contrustor của Promise)
+Promise: được sinh ra để xử lý các thao tác bất đồng bộ - giải quyết hiện tượng callback hell(pyramid of doom)
+Promise được hỗ trợ từ ES6(phiên bản javascript thứ 6)
+
+
+Các bước tạo ra một Promise
+1: New Promise (khởi tạo một new Promise gán cho một biến)
+2: Executor( đối số truyền vào Promise là hàm thực thi )
+
+var promise = new Promise(
+	function(resolve, reject){
+		resolve(value) // thành công
+		reject('error msg') // thất bại
+		gọi một trong 2 nếu chắc chắn sẽ thành công hay thất bại / không thì gọi cả 2 
+	}
+)
+
+Các trạng thái của Promise(states)
+pending - (trạng thái chờ - xảy ra khi không có resolve() hay reject() ở function đối số truyền vào contrustor Promise)
+fullfilled - (trạng thái thành công - khi promise có resolve() - ở function đối số truyền vào contrustor Promise)
+Rejected - (trạng thái thất bại - khi promise có reject() - ở function đối số truyền vào contrustor Promise)
+
+nếu để resolve(value) và reject("error message") : trạng thái sẽ là fullfilled
+nếu nhận được value thì sẽ rơi vào resolve() 
+nếu resolve() không nhận được value thì sẽ thực thi reject() và in ra thông báo lỗi được truyền vào reject ở hàm catch(eror mesage)
+
+Ở trạng thái pending - bộ nhớ sẽ bị rò rỉ(leak memory) - lãng phí bộ nhớ - chờ tải
+
+==========================
+nhận giá trị với Promise.then(value) hoặc nhận thông báo lỗi với Promise.catch(error)
+
+nếu Promise được resolve(value) nhận được kết quả promise thành công(fulfilled)
+=> phương thức Promise.then(function(value){
+	console.log(value)   // đây là kết quả nhận được
+})
+
+Nếu Promise bị rejected - reject("eror message") được thực thi
+=> phương thức Promise.catch(function(error){
+	console.log(error) // đây là eror message nhận được ở reject
+})
+
+
+
+Lưu ý: nếu không đặt catch() khi promise bị reject(rejected state) ta sẽ gặp lỗi ở console.log:
+
+Lỗi: Uncaught (in promise) Rejected - do không catch() bắt lỗi ở phần nhận giá trị(không có Promise.catch())
+*/
+
+var studentF8 = 
+'[{"ID":1,"name":"Son Banh","Class":"12A1","Course learned":"PHP","State": true}, {"ID":1,"name":"Son Banh","Class":"12A1","Course learned":"PHP","State": true}]';
+var myPromise = new Promise(
+	//Executor function
+	function(resolve, reject){
+		// reject("error message", error code);
+		// resolve(1);
+		resolve(studentF8);
+		reject("Rejected");
+	}
+);
+
+
+
+//để nhận giá trị trả về(ta có 2 phương thức)
+//Promise.then(callback(value){})=> khi promise được resolve được thực thi - kết quả trả về thành công
+//Promise.catch(callback(value){})=> khi promise bị reject (thât bại) - kết quả trả về là lỗi
+
+myPromise
+.then(function(studentF8) {
+	
+	var getStudents = JSON.parse(studentF8);
+	var total = 1;
+	// sử dụng JSON.parse() để convert data định dạng JSON sang Javascript
+	console.log(getStudents);
+	var student = getStudents.map(function(student, index, array){
+		return `<div id="number${total++}"><p>${student.ID}</p><p>${student.name}</p><p>${student.Class}</p></div>`;
+	})
+	console.log(student);
+	var html  = student.join('');
+	console.log(html);
+	document.querySelector('.myArea').innerHTML = html;
+})
+.catch(function(error) {
+	console.log(error);
+})
+
+

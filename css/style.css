@@ -11,9 +11,6 @@ input[type='search']:focus~ul {
 } */
 
 
-div {
-  width: 300px;
-  height: 300px;
+#number1 {
   background-color: blue;
-
 }
