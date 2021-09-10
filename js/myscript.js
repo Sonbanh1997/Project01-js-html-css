@@ -2045,3 +2045,5 @@ console.log(JSON.stringify(null));
 console.log(JSON.stringify(undefined));
 console.log(JSON.stringify(['PHP', 'Java', 'HTML5']));
 console.log(JSON.stringify({name: "Sơn Bành", age: 18, isCompleted: true, Type: null}))
+
+var a = 1;
