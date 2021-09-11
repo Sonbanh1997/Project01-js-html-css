@@ -2077,7 +2077,10 @@ Các bước tạo ra một Promise
 2: Executor( đối số truyền vào Promise là hàm thực thi )
 
 var promise = new Promise(
-	function(resolve, reject){
+		//viet code logic ở đây(tùy theo logic nếu chúng ta kiểm một điều kiện - nếu ta biết logic đó là đúng(điều kiện đúng),
+		thì ta chỉ gọi hàm resolve(value) và trả giá trị vào hàm value;
+		nếu ta biết logic đó sai, thì gọi hàm reject và truyền mã lỗi vào hàm reject(eror)
+
 		resolve(value) // thành công
 		reject('error msg') // thất bại
 		gọi một trong 2 nếu chắc chắn sẽ thành công hay thất bại / không thì gọi cả 2 
@@ -2115,41 +2118,294 @@ Lưu ý: nếu không đặt catch() khi promise bị reject(rejected state) ta 
 Lỗi: Uncaught (in promise) Rejected - do không catch() bắt lỗi ở phần nhận giá trị(không có Promise.catch())
 */
 
-var studentF8 = 
-'[{"ID":1,"name":"Son Banh","Class":"12A1","Course learned":"PHP","State": true}, {"ID":1,"name":"Son Banh","Class":"12A1","Course learned":"PHP","State": true}]';
-var myPromise = new Promise(
-	//Executor function
-	function(resolve, reject){
-		// reject("error message", error code);
-		// resolve(1);
-		resolve(studentF8);
-		reject("Rejected");
-	}
-);
+// var a = 1;
 
+// var studentF8 = 
+// '[{"ID":1,"name":"Son Banh","Class":"12A1","Course learned":"PHP","State": true}, {"ID":1,"name":"Son Banh","Class":"12A1","Course learned":"PHP","State": true}]';
+// //studentF8 được giả định là một dữ liệu định dạng JSON
+// //typeof studentF8 la kiểu strings(định dạng dữ liệu của JSON được thể hiện là các chuỗi ký tự)
+// var myPromise = new Promise(
+// 	//Executor function
+// 	function(resolve, reject){
+// 		// reject("error message", error code);
+
+// 		//đây là giả định phần logic code kiểm tra if else(không liên quan đến bài học)
+// 		if((typeof studentF8) === 'string'){
+// 			resolve(studentF8);
+// 		} else {
+// 			reject("Xảy ra lỗi");
+// 		}
+// 	}
+// );
+
+/* 
+ĐÂY là structure(cấu trúc) của một promise // để nhận kết quả từ promise trả về xem tiếp phần bên dưới
+
+var myPromise = new Promise(
+	function(resolve, reject){
+			resolve(value); // promise thành công(được thực hiện)
+			hoặc reject(eror); promise không thành công(không được thực hiện)
+
+	}
+)
+
+*/
 
 
 //để nhận giá trị trả về(ta có 2 phương thức)
 //Promise.then(callback(value){})=> khi promise được resolve được thực thi - kết quả trả về thành công
 //Promise.catch(callback(value){})=> khi promise bị reject (thât bại) - kết quả trả về là lỗi
 
-myPromise
-.then(function(studentF8) {
+// myPromise
+// .then(function(studentF8) {
 	
-	var getStudents = JSON.parse(studentF8);
-	var total = 1;
-	// sử dụng JSON.parse() để convert data định dạng JSON sang Javascript
-	console.log(getStudents);
-	var student = getStudents.map(function(student, index, array){
-		return `<div id="number${total++}"><p>${student.ID}</p><p>${student.name}</p><p>${student.Class}</p></div>`;
+
+// 	// Phần này nằm ngoài bài học(Cách lấy kết quả từ promise và render(hiển thị) ra giao diện)
+// 	var getStudents = JSON.parse(studentF8);
+// 	var total = 1;
+// 	// sử dụng JSON.parse() để convert data định dạng JSON sang Javascript
+// 	var student = getStudents.map(function(student, index, array){
+// 		return `<div id="number${total++}"><p>${student.ID}</p><p>${student.name}</p><p>${student.Class}</p></div>`;
+// 	})
+	
+// 	var html  = student.join('');
+// 	document.querySelector('.myArea').innerHTML = html;
+// })
+// .catch(function(error) {
+// 	console.log(error);
+// })
+
+
+
+// /* 
+// Promise(chain): tính chất chuỗi trong promise
+// giải quyết callback hell với tính chất chuỗi trong promise
+
+
+// */
+
+// var secondPromise = new Promise(
+// 	//Executor
+// 	function(resolve, reject){
+// 		resolve();
+// 	}
+// );
+
+// secondPromise
+// 	.then(function() {
+// 		console.log(1);
+// 		//return về 2 / 2 này sẽ được .then() thứ nhất nhận và truyền vào qua biến data ở .then(dâta) thứ 2
+// 		return 2;
+// 	})
+// 	.then(function(data) {
+// 		console.log(data); // giá trị ở biến data này là 2( được .then() thứ nhất truyền vào)
+// 		return 3;
+// 	})
+// 	.then(function(data) { //giá trị data ở đây là 3(được .then() thứ 2 nhận từ return ở hàm callback của nó và truyền vào biến data ở .then() thứ 3
+// 		console.log(data);
+// 	})
+// 	.catch(function(error) {
+// 		console.log(error);
+// 	})
+
+// var thirdPromise = new Promise(
+// 	function(resolve, reject){
+// 		resolve();
+// 	}
+// 	)
+
+// thirdPromise
+// 	.then(function(){
+// 		return new Promise(function(resolve) {
+// 			setTimeout(function(){
+// 				resolve([1, 2, 3]);
+// 			}, 3000);
+// 		})
+// 	})
+// 	.then(function(data) {
+// 		console.log(data);
+// 	})
+		/*  
+		return Promise ở đây tương tự như việc ta khởi tạo một Promise bình thường
+		ở callback của chuỗi .then() này ta return một new promise()
+		và gọi resolve sau 3 giây
+		kết quả callback return về một Promise sau 3s, 
+		.then() thứ nhất nhận return từ callback là một Promise,
+		.then() thứ nhất lúc này giống như một Promise
+		Nói cách khác, .then() thứ nhất sẽ return lại cho ta giá trị mà return ở callback của nó trả về
+		nên ta có cấu trúc:
+
+		thirdPromise
+			Promise
+				.then() kế tiếp
+
+
+
+		Giá trị nhận được ở .then() tiếp theo là mảng [1, 2, 3] được gọi ở resolve của .then() thứ nhất sau 3s
+		*/ 
+	
+
+	/* 
+	ta có thể xem các hàm .then(), .catch(), .finally() là những khối code, 
+	Các khối code này được nối với nhau khối code kế tiếp một cách tuần tự (ta gọi đây là chuỗi trong promise)
+	Với tính chất chuỗi của promise, khi một  resolve() được promise gọi tới, ta có thể có nhiều chuỗi(hàm) .then() ở phần nhận giá trị từ promise
+	các hàm .then() được thực thi theo tính chất chuỗi(cái nào đứng trước sẽ thực thi trước và tuần tự nhau)
+	
+	giá trị trả về khi sử dụng return trong callback function của .then() hoàn toàn có thể nhận được ở các hàm .then() kế tiếp
+	
+
+	.then(function(){
+		console.log(1);
+		//return về 2 / 2 này sẽ được .then() thứ nhất nhận và truyền vào qua biến data ở .then(dâta) thứ 2
+		return 2;
 	})
-	console.log(student);
-	var html  = student.join('');
-	console.log(html);
-	document.querySelector('.myArea').innerHTML = html;
-})
-.catch(function(error) {
-	console.log(error);
-})
+	.then(function(data){
+		console.log(data); // giá trị ở biến data này là 2( được .then() thứ nhất truyền vào)
+		return 3;
+	})
+	.then(function(data){ //giá trị data ở đây là 3(được .then() thứ 2 nhận từ return ở hàm callback của nó và truyền vào biến data ở .then() thứ 3
+		console.log(data);
+	})
+	.catch(function(error){
+		console.log(error);
+	})
 
 
+
+
+
+
+	1: Tính chất chuỗi trong promise cho phép ta khi sử dụng resolve(), sẽ tạo được nhiều chuỗi .then()
+	khi resolve() được thực thi, code sẽ lọt vào hàm then() thứ nhất, khi hàm then() thứ nhất xử lý xong, sẽ chạy vào hàm then() kế tiếp, 
+	và cứ tuần tự cho đến cuỗi cùng (tính chất chuỗi trong promise)
+
+	2: callback trong chuỗi .then() thứ nhất return về cái gì, ta hoàn toàn có thể nhận được nó ở chuỗi .then() kế tiếp
+	Từ ý thứ 2. ta đã  giải quyết được 1 phần của callback hell(giải quyết được việc code bị rối, khó nhin - pyramid of doom)
+	Do tính chất chuỗi, nên khi callback trong .then() thứ nhất return, .chuỗi .then() sẽ nhận vào giá trị từ callback và truyền nó vào callback ở chuỗi .then() kế tiếp,
+	và công việc lại tiếp tục lặp lại cho đến khi .then() cuối cùng thực thi xong
+	
+	3: Nếu ta không return bất cứ gì ở callback của .then() thì, giá trị nhận ở .then() kế tiếp sẽ là undefined (một function khi không return gì thì sẽ là undefined - không trả lại gì cả)
+
+	4:Trong function callback của .then(): Nếu nó không return về một Promise thì .then kế tiếp sẽ được chạy ngay lặp tức(không có thời gian chờ)
+	Nếu return của callback trong .then() là một Promise, thì .then() kế tiếp phải đợi cho đến khi Promise ở .then() phía trước thực thi xong, thì nó mới được chạy
+
+	*/
+
+	//giải quyết bài tập in ra mỗi số 1, 2, 3 sau 1 giây và vấn đề giá trị trả về khi sử dụng callback dẫn đến mô hình callback hell ( rối code, khó nhìn)
+
+	// function sleep(timeSleep){
+	// 	return new Promise(
+	// 		function(resolve){
+	// 			setTimeout(function(){
+	// 				resolve('Come to here');
+	// 				//gọi đến resolve sau khoảng thời gian là timeSleep
+	// 			}, timeSleep);
+	// 		}
+	// 	)
+	// }
+	//bản thân sleep nhận lại return của callback ở trên là một Promise, nên sleep lúc này là một Promise
+	//vậy nên ta có thể gọi hàm sleep(truyền vào timeSleep), và đồng thời có thể sử dụng .then() vì sleep đang là một Promise
+	// sleep(1000)
+	// 	.then(function(data){	
+	// 		console.log(1);
+	// 		console.log('First .then():', data);
+	// 		return sleep(1000);
+	// 	})
+	// 	/* 
+	// 	.then() này thực hiện trước rồi truyền giá trị sau đó return vê hàm sleep(1000) với khoảng thời gian chờ là 1 giây,  
+	// 	đồng thời hàm sleep(1000) đang là Promise -> callback .then() này return về một Promise,
+	// 	 .then() này nhận về promise từ callback của nó và nó trở thành một Promise
+	// 	, Promise này tiếp tục .then() kế tiếp và trả giá trị data vào callback của .then() kế tiếp 
+	// 	*/
+	// 	.then(function(data){
+	// 		console.log(2);
+	// 		console.log('Second .then():', data);
+	// 		return sleep(1000);
+	// 	})
+	// 	//chuỗi .then() thứ 2 tiếp tục thực hiện tương tự chuỗi .then() thứ nhất
+	// 	.then(function(data){
+	// 		console.log(3);
+	// 		console.log('Third .then():', data);
+	// 	})
+	// 	.catch(function(error){
+
+	// 	})
+
+
+/* 
+Promise là gì ?
+	Promise là khái niệm được sinh ra giúp xử lý các thao tác bất đồng bộ( giải quyết vấn đề khi sử dụng callback trong xử lý bất đồng bộ 
+		dẫn đến callback hell , làm cho code khó nhìn, rối)
+	các bước để tạo một promise
+	1:khởi tạo với từ khóa new Promise từ contrustor của Promise()
+	2 đối số truyền vào Promise là một callback function(hay còn gọi là Executor - hàm thực thi)
+	
+	Executor sẽ nhận vào 2 hàm là resolve, và reject
+
+	Khi Promise  gọi hàm resolve() // có nghĩa là Promise thành công
+	code sẽ lọt vào hàm .then() và thực thi các xử lý bên trong hàm .then()
+
+	khi Promise gọi hàm reject() // Promise bị từ chối
+	code sẽ lọt hàm .catch() và thực thi các xử lý bên trong hàm .catch()
+
+	khi truyền vào resolve một dữ liệu, ta sẽ nhận được nó ở tham số data của callback trong hàm .then(function(data){});
+	tương tự như khi truyền tham số vào reject ta cũng sẽ nhận được nó ở tham số của callback trong hàm .catch(function(data){});
+	
+	
+	//các trường hơp của Promise
+//pending : khi Promise không gọi resolve hay reject
+//fulfilled: khi Promise gọi  resolve() // thành công
+//rejected: khi promise gọi reject() // thất bại
+
+
+Nếu một Promise gọi resolve hoặc reject  nhưng không có bất cứ giá trị gì được truyền vào,
+thì mặc định tham số data ở cả callback của .then() và .catch() đều là undefined
+
+
+
+Với tính chất chuỗi trong Promise, ta hoàn toàn có thể thêm nhiều chuỗi .then() khi Promise gọi resolve() (Tính chất chuỗi trong promise
+	sẽ thực thi từng chuỗi .then() theo thứ tự từ trên xuỗng dưới một cách tuần tự)
+
+Cùng với đó khi callback của .then() ở vị trí đầu hay các vị trí kế tiếp return về giá trị gì thì ta hoàn toàn có thể nhận được giá trị đó ở các .then kế tiếp
+qua tham số truyền vào của hàm callback trong các .then() ở vị trí kế tiếp của .then() return
+
+
+// khi ta return về một giá trị trong hàm callback của .then() đầu tiên không phải là một Promise (  các .then() kế tiếp sẽ được thực thi ngay lập tức khi Promise gọi resolve())
+
+//Nhưng khi ta return về một Promise ở vị trí .then() đầu tiên hoặc các .then() kế tiếp, các .then() nằm phía sau .then() return về một Promise sẽ phải cho đến khi 
+callback của .then() mà return về một Promise thực thi xong, thì .then() kế tiếp mới được thực thi
+
+
+trường hợp khi một callback của .then() return về giá trị không là một Promise - thì .then() đó sẽ return về giá trị đó và trở thành data của .then() kế tiếp
+
+Trường hợp khi một callback của .then() return về một Promise , thì .then() đó sẽ return là một Promise giống như khi ta tạo một Promise(Promise này sẽ nằm lồng trong Promise mà ta đã tạo)
+
+lúc này , ta có thể hiểu  chuỗi .then() đó đang là một Promise, và các chuỗi .then() kế tiếp sẽ có thể nhận được data từ Promise đó khi nó gọi resolve() hoặc khi nó gọi reject()
+thì sẽ lọt vào hàm .catch() phía sau
+
+*/
+
+function sleep(ms){
+	return new Promise(
+		(resolve, reject)=> {
+			setTimeout(()=>{
+				resolve();
+			}, ms);
+	}
+	)
+}
+
+sleep(1000)
+.then(function(){
+	console.log(1);
+	return sleep(1000);
+})
+.then(function(){
+	console.log(2);
+	return sleep(1000);
+})
+.then(function(){
+	console.log(3);
+})
+
+// console.log(myPromise);
