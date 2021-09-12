@@ -2385,27 +2385,473 @@ thì sẽ lọt vào hàm .catch() phía sau
 
 */
 
-function sleep(ms){
-	return new Promise(
-		(resolve, reject)=> {
-			setTimeout(()=>{
-				resolve();
-			}, ms);
-	}
-	)
+
+// function sleep(ms){
+// 	return new Promise(
+// 		(resolve, reject)=> {
+// 			setTimeout(()=>{
+// 				resolve();
+// 			}, ms);
+// 	}
+// 	)
+// }
+
+// sleep(1000)
+// .then(function(){
+// 	console.log(1);
+// 	return sleep(1000);
+// })
+// .then(function(){
+// 	console.log(2);
+// 	return new Promise(function(resolve, reject){
+// 		reject('Lỗi')
+// 	})
+// })
+// .then(function(){
+	
+// 	console.log(3);
+// 	return sleep(1000);
+// })
+// .then(function(){
+// 	console.log(4);
+// })
+
+// .catch(function(erro){
+// 	console.log(erro);
+// })
+
+
+// var promise1 = new Promise(
+// 	function(resolve, reject){
+// 		resolve([1]);
+// 	}
+// )
+
+
+
+
+// promise1
+// .then(function(data){
+// 	return new Promise(function(resolve){
+		
+// 		resolve(data.concat([2, 3]));
+		
+// 	})
+// })
+// .then(function(data){
+// 	console.log(data);
+// })
+// console.log(myPromise);
+
+
+
+
+/* 
+========================================================
+Lưu ý: Trong qua trình các chuỗi .then trong Promise  return một promise resolve(), nếu chuỗi nào return về một Promise reject(), thì các chuỗi kế tiếp sẽ .then() return về 
+Promise resolve() kế tiếp sẽ ngừng chạy, và code sẽ tự động lọt vào catch() đo nhận được một Promise bị rejected 
+Promise.resolve(); // khởi tạo một Resolve Promise (Promise luôn thành công)
+Promise.reject();	// Khởi tạo một reject Promise (Promise bị từ chối)
+Promise all(); //Sử dụng để thực thi 2 Promise cùng một lúc khi không có ràn buộc dữ liệu(thực thi song song cùng lúc 
+và trả về kết quả cùng một lúc thay vì chạy tuần tự từng Promise như bình thường)
+
+
+Với Promise.resolve() và Promise.reject(), ta sử dụng khi biết rõ logic được trả về là đúng hoặc sai
+cách dùng này giúp code ngắn hơn khi khởi tạo một Promise như bình thường
+//
+*/
+
+// var promise2 = Promise.resolve([1]);
+
+// promise2.then(function(data){
+// 	return new Promise(function(resolve){
+// 		setTimeout(function(){
+// 			resolve(data);
+// 		}, 5000)
+// 	})
+// ;})
+// .then(function(data){
+// 	console.log(data);
+// })
+
+// var promise3 = new Promise(
+// 	//Executor
+// 	function(resolve, reject){
+// 		setTimeout(function(){
+// 			reject();
+// 		}, 5000);
+// 	}
+// )
+
+//sử dụng Promise.all() để thực thi 2 Promise song song(với điều kiện là không có ràn buộc về dữ liệu - không có dữ liệu nào liên quan với nhau)
+//Điều kiện để Promise .all lọt vào .then() là cả 2 Promise kia phải đều được resolve(thành công) ( ở trang thái fulfilled)
+//Trong trường hợp một trong hai Promise kia bị reject() (ở trạng thái từ chối(rejected)) thì Promise.all sẽ thực thi catch();
+// Promise.all([promise2, promise3])
+// 	.then(function(result){
+// 			console.log(result);
+// 			var myResult = result[0].concat(result[1]);
+// 			console.log(myResult);
+// 	})
+
+// 	.catch(function(){
+// 		console.log('eror');
+// 	})
+
+
+
+
+
+
+/* 
+Ứng dụng thực tế:
+
+Mô phỏng cách lấy comment từ các user và hiển thị lên giao diện
+
+các user này có tên, và mỗi comment mà user đó comment sẽ là của user đó
+
+trên mỗi comment. ta có một khóa user_id tương ứng với id trên mãng user để biết comment nào của user nào
+
+Yêu cầu: hiện thị ra comment của các user với tên của user đó(format username: comment)
+
+các bước:
+1: tạo một hàm get comment và return một promise để lấy ra được comments trong mãng comment
+2: trong mãng comments đã có ở hàm .then(), lấy ra user_id của các comments
+3: với các user_id đã có, ta tạo hàm getUser truyền vào user_id , hàm getUser để lọc các user tương ứng với user_id
+
+
+
+*/
+
+
+
+
+
+
+
+
+// var users = [
+// 	{
+// 		id: 1,
+// 		name: 'Son Banh'
+		
+// 	},
+
+// 	{
+// 		id: 2,
+// 		name: 'Thanh Hoang'
+// 	},
+
+// 	{
+// 		id: 3,
+// 		name: 'Dinh Quy'
+// 	},
+
+// 	{
+// 		id: 4,
+// 		name: 'Nam Hung'
+// 	}
+
+// ]
+
+// // var test = [1, 2, 3];
+// // console.log(test.includes(1));
+
+
+// var comments = [
+// 	{
+// 		id: 1,
+// 		user_id: 1,
+// 		content: 'Chào các bạn, Tui là Sơn'
+// 	},
+
+// 	{
+// 		id: 2,
+// 		user_id: 2,
+// 		content: 'Hi, Tui là Hoàng 18+ :)'
+// 	},
+
+// 	{
+// 		id: 3,
+// 		user_id: 3,
+// 		content: 'Tao là Quý nghiêm túc'
+// 	},
+
+// 	{
+// 		id: 4,
+// 		user_id: 3,
+// 		content: 'Một + Một = 2'
+// 	}
+// ]
+
+
+
+
+// //bước 1
+// function getComments(){
+// 	return new Promise(
+// 		function(resolve, reject){
+// 			setTimeout(function(){
+// 				resolve(comments);
+// 			}, 1000)
+// 		}
+		
+// 	)
+// }
+
+// //bước 3
+// function getUserByID(User_id){
+// 	return new Promise(
+// 		function(resolve, reject){
+// 			//trỏ vào mãng users để lọc ra các user tương ứng với user_id của comment
+// 			var userByID = users.filter(function(user){
+// 				return User_id.includes(user.id);
+// 			})
+// 			setTimeout(function(){
+// 				//gọi resolve(truyền vào user đã lọc)
+// 				resolve(userByID);
+// 			}, 1000)
+// 		}
+// 	)
+// }
+
+
+
+
+
+// // Nhận được User_id từ comment
+// getComments()
+
+// 	//bước 2
+// 					//do return getUserByID(User_id) là một promise và được return, nên thằng .then() này return lại getUserByID(User_id) promise
+// 	.then(function(comments){
+// 		var User_id = comments.map(function(comment){
+// 			return comment.user_id;
+// 		})
+
+// 		//getUserByID luc nay da la mot promise // return lại promise thì chuỗi .then() này sẽ nhận lại được Promise getUserByID(trở thành getUserByID promise)
+// 		//bước 4
+// 		return getUserByID(User_id)
+// 			//return lại một object gồm 2 mãng / 1 là mãng user đã được lọc ở promise getUserByID, 2 là comments đã lấy được ở hàm getComents
+// 			.then(function(user){
+// 				return {
+// 					user: user,
+// 					comments: comments
+// 				};
+// 			})
+		
+// 		// console.log(User_id);
+// 	})
+// 		//bước 5
+// 		//thằng .then này là của getUserByID(User_id) promise do .then() phía tren return về
+// 	.then(function(data){ // data chính là object đã return ở bước 5
+// 		console.log(data);
+// 		var block_comment = document.querySelector('ul');
+// 		console.log(block_comment);
+// 		var html ='';
+// 		data.comments.forEach(function(comment){
+// 			var user = data.user.find(function(user){
+// 				return user.id === comment.user_id;
+// 			});
+// 			html += `<li>${user.name}: ${comment.content}</li>`;
+// 			console.log(html);
+// 		});
+// 		block_comment.innerHTML = html;
+// 	})
+
+
+
+
+
+
+
+
+
+
+
+
+/* 
+Fetch API
+API là gì: API viết tắt là Application Programming Interface - giao diện ứng dụng lập trình
+theo cách hiểu khác: API là một cổng giao tiếp giữa các chương trình, giúp cho các chương trình khác nhau có thể giao tiếp và nhận, chuyển thông tin
+
+hiểu đơn giản: backend sẽ cho chúng ta một url(url này là một API), qua url này, chúng ta sẽ dùng fetch để lấy ra được dữ liệu từ API đó
+
+fetch(URL) // bước đầu tiền này sau khi truyền url vào fetch(), ta sẽ nhận được một promise, nên ta có thể sử dụng .then() ở bên dưới
+	.then(function(response){ // ở đây ta chưa nhận được dữ liệu, mà sẽ nhận được một stream(luồng dữ liệu) -> chính là cái response bên trong,
+		bản thân response này là một đối tượng, và đang giữ các dữ liệu mà ta cần lấy
+		để lấy dữ liệu: từ thg response ta gọi phương thức json()( response.json() )
+		response.json() lại là một promise, nên ta có thể gọi một thằng .then() kế tiếp và lấy dữ liệu bằng tham số ở trong callback của nó
+		
+		//các dữ liệu mà ta lấy được: mặc định đã được chuyển từ định dạng JSON sang javascript (Parse),
+		nó đã được JSON.Parse(chuyển định dạng dữ liệu từ JSON sang Javascript) ngay khi ta gọi đến phương thức json() (response.json())
+		nên ở tham số.then(function(data){}), tức là data ở thg callback, ta sẽ nhận được kiểu dữ liệu hoàn toàn ở kiểu Javascript, không còn là định
+		dạng JSON nữa
+
+	})
+
+Fetch(API url)
+
+*/
+
+
+// var postAPI = 'https://jsonplaceholder.typicode.com/posts';
+// console.log(postAPI);
+
+// fetch(postAPI)
+// 	.then(function(response){
+// 		return response.json();
+// 	})
+// 	.then(function(posts){
+// 		console.log(posts)
+// 		var block = document.querySelector('ul');
+// 		var postRender = posts.map(function(post){
+// 			return `<li>
+// 			<p>${post.id}</p><br>
+// 			<h1>${post.title}</h1>
+// 			</li>
+// 			`;
+			
+// 		})
+		
+// 		var myPost = postRender.join('');
+// 		block.innerHTML = myPost;
+// 	})
+
+
+var userLists = 'https://jsonplaceholder.typicode.com/users';
+
+var posts = 'https://jsonplaceholder.typicode.com/posts';
+
+
+function getPosts(){
+	return fetch(posts)
+		.then(function(response){
+			return response.json();
+		})
+
+		
+		.then(function(posts){
+			var post_userId = posts.map(function(post){
+				return post.userId;
+			})
+			
+			return GetUser(post_userId)
+				.then(function(users){
+					return {
+						posts: posts,
+						users: users
+					}
+
+							
+				})
+		})
+		.then(function(data){
+			var html ='';
+			var blockPost = document.querySelector('ul');
+			var myPost = data.posts.forEach(function(post){
+			var userOwnPost = data.users.find(function(user){
+					return user.id === post.userId;
+				})
+				html+= 
+				`
+				<li>
+					<p>${userOwnPost.name}: id:${userOwnPost.id}</p>
+					<div>
+						<p>PostID:${post.id} - Post_userID:${post.userId}</p>
+						<h2>${post.title}</h2>
+						<p>${post.body}</p>
+					</div>
+				</li>
+				`;
+			})
+			 blockPost.innerHTML = html;
+		})
+	
 }
 
-sleep(1000)
-.then(function(){
-	console.log(1);
-	return sleep(1000);
-})
-.then(function(){
-	console.log(2);
-	return sleep(1000);
-})
-.then(function(){
-	console.log(3);
-})
+function GetUser(post_userId){
+	return fetch(userLists)
+		.then(function(response){
+				return response.json();
+		})
+		.then(function(users){
+			var userByID = users.filter(function(user){
+				return post_userId.includes(user.id);
+			})
+				return userByID;
+		 })
+}
 
-// console.log(myPromise);
+
+getPosts();
+
+
+// var photos = 'https://jsonplaceholder.typicode.com/photos';
+
+// fetch(photos)
+// 	.then((response)=> {
+// 		return response.json(); 
+// 		/* 
+// 		//response.json() là một promise : ở đây nếu gọi API thành công 
+// 		response.json() -> resolve() -> fulfilled(lọt vào .then())
+// 		nếu gọi API thất bại: 
+// 		response.json()-> đầu tiên sẽ ở trạng thái pending
+// 		sau một khoảng thời gian nếu API vẫn không được gọi thành công
+// 		response.json() -> reject() -> rejected(lọt vào .catch())
+// 		*/
+// 	})
+// 	.then((photos)=>{
+// 		var photoBlock = document.querySelector('.myArea');
+// 		var albums = photos.map(function(photo){
+// 			return `
+// 			<div>
+// 				<p>${photo.title}</p>
+// 				<img src="${photo.url}" alt="">
+// 			</div>
+// 			`
+// 		})
+// 		return albums;
+// 		// var result = albums.join('');
+// 		// console.log(result);
+// 		// photoBlock.innerHTML = result;
+// 	})
+// 	.then(function(albums){
+// 		/* 
+// 		với tính chất chuỗi của promise mà ta đã học, ta có thể nhận được giá trị return ở callback của
+// 		.then() ở trên
+// 		nếu .then() phía trươc return về một promise thay vì là những giá trị khác
+// 		.then() này sẽ phải đợi cho đến khi promise ở .then trước giải quyết xong thì .then() này mới được chạy
+		
+// 		nếu ta return về một promise ở callback của .then(), thì  callback đó sẽ return về promise bên trong
+// 		khi nó thực thi xong, . và .then() có cái promise mà callback đang giữ, sẽ return lại promise đó(trở thành promise đó),
+// 		và ki ta sử dụng .then() tiếp theo, là ta đang trỏ đến promise mà .then() kia return(chứ không phải
+// 			promise chính mà ta đã tạo)
+		
+// 		*/
+// 		var photoBlock = document.querySelector('.myArea');
+// 		console.log(albums);
+// 		var result = albums.join('');
+// 		console.log(result);
+// 		photoBlock.innerHTML = result;
+// 	})
+		
+	
+// 	.catch(function(error){
+// 		console.log(error);
+// 	})
+
+
+
+
+// var usersLists = 'http://localhost:3000/users';
+// fetch(usersLists)
+// 	.then(function(response){
+// 		return response.json();
+// 	})
+// 	.then(function(users){
+// 		console.log(users);
+// 	})
+
+// var myName = '     Son Banh';
+
+
