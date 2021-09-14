@@ -2718,72 +2718,76 @@ Fetch(API url)
 // 	})
 
 
-var userLists = 'https://jsonplaceholder.typicode.com/users';
-
-var posts = 'https://jsonplaceholder.typicode.com/posts';
+//Bài tập fetch, lấy ra các bài posts có userid tương ứng với id của user
 
 
-function getPosts(){
-	return fetch(posts)
-		.then(function(response){
-			return response.json();
-		})
+
+// var userLists = 'https://jsonplaceholder.typicode.com/users';
+
+// var posts = 'https://jsonplaceholder.typicode.com/posts';
+
+
+// function getPosts(){
+// 	return fetch(posts)
+// 		.then(function(response){
+// 			return response.json();
+// 		})
 
 		
-		.then(function(posts){
-			var post_userId = posts.map(function(post){
-				return post.userId;
-			})
+// 		.then(function(posts){
+// 			var post_userId = posts.map(function(post){
+// 				return post.userId;
+// 			})
 			
-			return GetUser(post_userId)
-				.then(function(users){
-					return {
-						posts: posts,
-						users: users
-					}
+// 			return GetUser(post_userId)
+// 				.then(function(users){
+// 					return {
+// 						posts: posts,
+// 						users: users
+// 					}
 
 							
-				})
-		})
-		.then(function(data){
-			var html ='';
-			var blockPost = document.querySelector('ul');
-			var myPost = data.posts.forEach(function(post){
-			var userOwnPost = data.users.find(function(user){
-					return user.id === post.userId;
-				})
-				html+= 
-				`
-				<li>
-					<p>${userOwnPost.name}: id:${userOwnPost.id}</p>
-					<div>
-						<p>PostID:${post.id} - Post_userID:${post.userId}</p>
-						<h2>${post.title}</h2>
-						<p>${post.body}</p>
-					</div>
-				</li>
-				`;
-			})
-			 blockPost.innerHTML = html;
-		})
+// 				})
+// 		})
+// 		.then(function(data){
+// 			var html ='';
+// 			var blockPost = document.querySelector('ul');
+// 			var myPost = data.posts.forEach(function(post){
+// 			var userOwnPost = data.users.find(function(user){
+// 					return user.id === post.userId;
+// 				})
+// 				html+= 
+// 				`
+// 				<li>
+// 					<p>${userOwnPost.name}: id:${userOwnPost.id}</p>
+// 					<div>
+// 						<p>PostID:${post.id} - Post_userID:${post.userId}</p>
+// 						<h2>${post.title}</h2>
+// 						<p>${post.body}</p>
+// 					</div>
+// 				</li>
+// 				`;
+// 			})
+// 			 blockPost.innerHTML = html;
+// 		})
 	
-}
+// }
 
-function GetUser(post_userId){
-	return fetch(userLists)
-		.then(function(response){
-				return response.json();
-		})
-		.then(function(users){
-			var userByID = users.filter(function(user){
-				return post_userId.includes(user.id);
-			})
-				return userByID;
-		 })
-}
+// function GetUser(post_userId){
+// 	return fetch(userLists)
+// 		.then(function(response){
+// 				return response.json();
+// 		})
+// 		.then(function(users){
+// 			var userByID = users.filter(function(user){
+// 				return post_userId.includes(user.id);
+// 			})
+// 				return userByID;
+// 		 })
+// }
 
 
-getPosts();
+// getPosts();
 
 
 // var photos = 'https://jsonplaceholder.typicode.com/photos';
@@ -2855,3 +2859,94 @@ getPosts();
 // var myName = '     Son Banh';
 
 
+/* 
+==========================================================
+cài đặt và Làm việc với Json server, xem bài 96 khóa học Javascript tại F8
+Json server giúp chúng ta tạo ra được một fake API hoạt động dựa trên tiêu chuẩn của Rest API
+
+*/
+
+
+// var courses = ' http://localhost:3000/courses';
+// fetch(courses)
+// 	.then(function(response){
+// 		return response.json();
+// 	})
+// 	.then(function(course){
+// 		console.log(course);
+// 	})
+
+
+
+
+/* 
+	Sử dụng postman để làm việc với API (Tạo mới, thêm, sửa, xóa CRUD)
+	CRUD concept:
+
+
+	C => Create (Tạo mới) 
+	R => Read(có nghĩa là lấy dữ liệu từ API - Get)
+	U => Update(Cập nhật, chỉnh sửa)
+	D => Delete(Xóa)
+
+
+	Rest API là gì: tìm hiểu 
+
+	Để học postman: xem qua bài giao thưc httpProtocol ở khóa backend nodejs
+	thông qua khóa học httpProtocol, ta thấy giao thức http có nhiều phương thức,
+	nhưng các phương thức chính là : Post, Get, Put, Delete (Tạo, lấy, sửa, xóa)
+
+	Json server hoạt động dựa trên tiêu chuẩn REST API và các fake API ta tạo ra hoạt động theo cách này
+
+	Làm việc với json Server(làm việc với Rest API)
+	
+	tương tự với các giao thức http ta đã học ở bài httpProtocol
+	khi làm việc với json Server(Json server hoạt động theo tiêu chuẩn Rest API)
+	ta sẽ dùng các quy tắc bên dưới để làm việc như thêm, sửa,xóa, cập nhật dữ liệu vào API SERVER
+
+	------------------------------------------------
+	Create: tạo -> phương thức: POST
+	Read: lấy dữ liệu ->: phương thức: GET
+	Update: chỉnh sửa ->  phương thức PUT/PATCH
+	Delete: xóa -> phương thức: DELETE
+
+*/
+
+
+var courseAPI ='http://localhost:3000/courses';
+
+
+function start(){
+	getCourse(renderCourse);
+}
+
+start()
+
+
+
+//Function getCourses
+function getCourse(renderCourse){
+	fetch(courseAPI)
+		.then(function(response){
+			return response.json();
+		})
+		.then(renderCourse);
+}
+
+
+function renderCourse(course){
+	var codeBlock = document.querySelector('ul');
+	console.log(course);
+		var courses = course.map(function(Coursee){
+			return `
+				<li>
+				<h4>${Coursee.id}</h4> 
+				<h1>${Coursee.name}</h1>
+				<p>${Coursee.description}</p>
+				</li>
+			`;
+		})
+
+		var result =courses.join('');
+		codeBlock.innerHTML = result;
+}

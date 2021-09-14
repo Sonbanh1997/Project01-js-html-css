@@ -1,0 +1,24 @@
+{
+  "courses": [
+    {
+      "id": 1,
+      "name": "PHP",
+      "description": "Khóa học PHP"
+    },
+    {
+      "name": "Javascript",
+      "description": "Học javascript tại F8",
+      "id": 2
+    },
+    {
+      "name": "Dart",
+      "description": "Khóa học về Dart",
+      "id": 3
+    },
+    {
+      "name": "HTML5",
+      "description": "Học làm web cơ bản với HTML5",
+      "id": 4
+    }
+  ]
+}
