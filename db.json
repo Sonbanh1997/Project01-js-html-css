@@ -6,19 +6,41 @@
       "description": "Khóa học PHP"
     },
     {
-      "name": "Javascript",
-      "description": "Học javascript tại F8",
+      "name": "Javascript 2",
+      "description": "Khoa học Javascript 2",
       "id": 2
     },
     {
-      "name": "Dart",
-      "description": "Khóa học về Dart",
+      "name": "Javascript 3",
+      "description": "Khoa học Javascript 3",
       "id": 3
     },
     {
-      "name": "HTML5",
-      "description": "Học làm web cơ bản với HTML5",
+      "name": "Javascript 3",
+      "description": "Khoa học Javascript 2",
       "id": 4
+    },
+    {
+      "name": "Javascript 3",
+      "description": "Khoa học Javascript 2",
+      "id": 5
+    }
+  ],
+  "student": [
+    {
+      "id": 1,
+      "fullname": "Bành Thái Sơn",
+      "age": "18"
+    },
+    {
+      "fullname": "Nguyễn Tiên 2",
+      "age": "30",
+      "id": 2
+    },
+    {
+      "fullname": "2",
+      "age": "23",
+      "id": 3
     }
   ]
 }

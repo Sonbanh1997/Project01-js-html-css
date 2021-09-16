@@ -2913,40 +2913,159 @@ Json server giúp chúng ta tạo ra được một fake API hoạt động dự
 */
 
 
-var courseAPI ='http://localhost:3000/courses';
 
+
+///////////////Bai tạp ung dụng fetch, tao, chinh sua, xoa, them vao database
+
+
+/* 
+Get API
+*/
+
+var coursesAPI = 'http://localhost:3000/courses';
 
 function start(){
-	getCourse(renderCourse);
+	var flag = false;
+	getCourse(courses_Render);
+	handleForm();
+}
+
+
+//Get Method(Lay du lieu hien thi ra man hinh)
+function getCourse(callback){
+	fetch(coursesAPI)
+		.then(function(responese){
+			return responese.json();
+		})
+			.then(callback);
+}
+
+function courses_Render(courses){
+	var block_Courses = document.querySelector('#block_courses')
+	var result = courses.map(function(course){
+		return `
+		<li class="course-item-${course.id}">
+		<h3>${course.name}</h3>
+		<p>${course.description}</p>
+		<button id="deteleBTN" onclick="deleteCourse(${course.id})">Delete</button>
+		<button id="updatebtn" onclick="updateCourse(${course.id})">Update</button>
+		</li>
+		`
+	})
+	block_Courses.innerHTML = result.join('');
+	
+	
+}
+
+
+function handleForm(){
+var createBTN = document.querySelector('#create_course');
+createBTN.addEventListener('click', addCourse);
+}
+
+//POST
+function addCourse(){
+	flag = true;
+	if(flag == true){	
+	var name = document.querySelector('input[name="name"]').value;
+	var description = document.querySelector('input[name="description"]').value;
+	var data = {
+	name:name,
+	description:description
+	}
+	console.log(data);
+	///Fetch to server
+	var requestInfo = {
+		method:"POST",
+		headers: {
+			'Content-Type': 'application/json'
+			// 'Content-Type': 'application/x-www-form-urlencoded',
+		},
+		body: JSON.stringify(data)
+	}
+	fetch(coursesAPI, requestInfo)
+		.then(function(responses){
+			return responses.json();
+		})
+		.then(function(){
+			getCourse(courses_Render);
+		})
+	}
+	flag = false;
+
+ }
+
+
+ //DELETE
+ function deleteCourse(id){
+	var request = {
+		method:"DELETE",
+		headers: {
+			'Content-Type': 'application/json'
+			// 'Content-Type': 'application/x-www-form-urlencoded',
+		}
+	}
+	fetch(coursesAPI + '/' + id, request)
+		.then(function(responses){
+			return responses.json();
+		})
+		.then(function(){
+			var element = document.querySelector('.course-item-' + id);
+			element.remove();
+			getCourse(courses_Render);
+		});
+ }
+
+//Update
+function updateCourse(id){
+	getCourse(function(course){
+		var name = document.querySelector('input[name="name"]');
+		var description = document.querySelector('input[name="description"]');
+		for(var item of course){
+			if(item.id == id){
+				name.value = item.name;
+				description.value = item.description;
+			}
+		}
+		var createBTN = document.querySelector('#create_course');
+		createBTN.innerHTML = 'Lưu';
+		createBTN.removeEventListener('click', addCourse);
+		createBTN.onclick = function(){
+			var name = document.querySelector('input[name="name"]');
+		var description = document.querySelector('input[name="description"]');
+			var data = {
+				name:name.value,
+				description:description.value
+			}
+			console.log(data);
+			updateHandle(id,data)
+		}
+	})
+}
+
+// function update_Course(){
+// 	updateCourse
+// }
+function updateHandle(id, data){
+	var request = {
+		method:"PATCH",
+		headers: {
+			'Content-Type': 'application/json'
+			// 'Content-Type': 'application/x-www-form-urlencoded',
+		},
+		body:JSON.stringify(data)
+	}
+	fetch(coursesAPI + '/' + id, request)
+		.then(function(responses){
+			return responses.json();
+		})	
+		.then(function(){
+			var createBTN = document.querySelector('#create_course');
+			createBTN.innerHTML = 'Thêm khóa học';
+			setTimeout(createBTN.onclick = function(){}, 2000);
+			createBTN.addEventListener('click', addCourse);
+			getCourse(courses_Render);
+		})
 }
 
 start()
-
-
-
-//Function getCourses
-function getCourse(renderCourse){
-	fetch(courseAPI)
-		.then(function(response){
-			return response.json();
-		})
-		.then(renderCourse);
-}
-
-
-function renderCourse(course){
-	var codeBlock = document.querySelector('ul');
-	console.log(course);
-		var courses = course.map(function(Coursee){
-			return `
-				<li>
-				<h4>${Coursee.id}</h4> 
-				<h1>${Coursee.name}</h1>
-				<p>${Coursee.description}</p>
-				</li>
-			`;
-		})
-
-		var result =courses.join('');
-		codeBlock.innerHTML = result;
-}
