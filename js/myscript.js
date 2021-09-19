@@ -2922,150 +2922,732 @@ Json server giúp chúng ta tạo ra được một fake API hoạt động dự
 Get API
 */
 
-var coursesAPI = 'http://localhost:3000/courses';
+// var coursesAPI = 'http://localhost:3000/courses';
 
-function start(){
-	var flag = false;
-	getCourse(courses_Render);
-	handleForm();
-}
-
-
-//Get Method(Lay du lieu hien thi ra man hinh)
-function getCourse(callback){
-	fetch(coursesAPI)
-		.then(function(responese){
-			return responese.json();
-		})
-			.then(callback);
-}
-
-function courses_Render(courses){
-	var block_Courses = document.querySelector('#block_courses')
-	var result = courses.map(function(course){
-		return `
-		<li class="course-item-${course.id}">
-		<h3>${course.name}</h3>
-		<p>${course.description}</p>
-		<button id="deteleBTN" onclick="deleteCourse(${course.id})">Delete</button>
-		<button id="updatebtn" onclick="updateCourse(${course.id})">Update</button>
-		</li>
-		`
-	})
-	block_Courses.innerHTML = result.join('');
-	
-	
-}
-
-
-function handleForm(){
-var createBTN = document.querySelector('#create_course');
-createBTN.addEventListener('click', addCourse);
-}
-
-//POST
-function addCourse(){
-	flag = true;
-	if(flag == true){	
-	var name = document.querySelector('input[name="name"]').value;
-	var description = document.querySelector('input[name="description"]').value;
-	var data = {
-	name:name,
-	description:description
-	}
-	console.log(data);
-	///Fetch to server
-	var requestInfo = {
-		method:"POST",
-		headers: {
-			'Content-Type': 'application/json'
-			// 'Content-Type': 'application/x-www-form-urlencoded',
-		},
-		body: JSON.stringify(data)
-	}
-	fetch(coursesAPI, requestInfo)
-		.then(function(responses){
-			return responses.json();
-		})
-		.then(function(){
-			getCourse(courses_Render);
-		})
-	}
-	flag = false;
-
- }
-
-
- //DELETE
- function deleteCourse(id){
-	var request = {
-		method:"DELETE",
-		headers: {
-			'Content-Type': 'application/json'
-			// 'Content-Type': 'application/x-www-form-urlencoded',
-		}
-	}
-	fetch(coursesAPI + '/' + id, request)
-		.then(function(responses){
-			return responses.json();
-		})
-		.then(function(){
-			var element = document.querySelector('.course-item-' + id);
-			element.remove();
-			getCourse(courses_Render);
-		});
- }
-
-//Update
-function updateCourse(id){
-	getCourse(function(course){
-		var name = document.querySelector('input[name="name"]');
-		var description = document.querySelector('input[name="description"]');
-		for(var item of course){
-			if(item.id == id){
-				name.value = item.name;
-				description.value = item.description;
-			}
-		}
-		var createBTN = document.querySelector('#create_course');
-		createBTN.innerHTML = 'Lưu';
-		createBTN.removeEventListener('click', addCourse);
-		createBTN.onclick = function(){
-			var name = document.querySelector('input[name="name"]');
-		var description = document.querySelector('input[name="description"]');
-			var data = {
-				name:name.value,
-				description:description.value
-			}
-			console.log(data);
-			updateHandle(id,data)
-		}
-	})
-}
-
-// function update_Course(){
-// 	updateCourse
+// function start(){
+// 	var flag = false;
+// 	getCourse(courses_Render);
+// 	handleForm();
 // }
-function updateHandle(id, data){
-	var request = {
-		method:"PATCH",
-		headers: {
-			'Content-Type': 'application/json'
-			// 'Content-Type': 'application/x-www-form-urlencoded',
-		},
-		body:JSON.stringify(data)
-	}
-	fetch(coursesAPI + '/' + id, request)
-		.then(function(responses){
-			return responses.json();
-		})	
-		.then(function(){
-			var createBTN = document.querySelector('#create_course');
-			createBTN.innerHTML = 'Thêm khóa học';
-			setTimeout(createBTN.onclick = function(){}, 2000);
-			createBTN.addEventListener('click', addCourse);
-			getCourse(courses_Render);
-		})
-}
 
-start()
+
+// //Get Method(Lay du lieu hien thi ra man hinh)
+// function getCourse(callback){
+// 	fetch(coursesAPI)
+// 		.then(function(responese){
+// 			return responese.json();
+// 		})
+// 			.then(callback);
+// }
+
+// function courses_Render(courses){
+// 	var block_Courses = document.querySelector('#block_courses')
+// 	var result = courses.map(function(course){
+// 		return `
+// 		<li class="course-item-${course.id}">
+// 		<h3>${course.name}</h3>
+// 		<p>${course.description}</p>
+// 		<button id="deteleBTN" onclick="deleteCourse(${course.id})">Delete</button>
+// 		<button id="updatebtn" onclick="updateCourse(${course.id})">Update</button>
+// 		</li>
+// 		`
+// 	})
+// 	block_Courses.innerHTML = result.join('');
+	
+	
+// }
+
+
+// function handleForm(){
+// var createBTN = document.querySelector('#create_course');
+// createBTN.addEventListener('click', addCourse);
+// }
+
+// //POST
+// function addCourse(){
+// 	flag = true;
+// 	if(flag == true){	
+// 	var name = document.querySelector('input[name="name"]').value;
+// 	var description = document.querySelector('input[name="description"]').value;
+// 	var data = {
+// 	name:name,
+// 	description:description
+// 	}
+// 	console.log(data);
+// 	///Fetch to server
+// 	var requestInfo = {
+// 		method:"POST",
+// 		headers: {
+// 			'Content-Type': 'application/json'
+// 			// 'Content-Type': 'application/x-www-form-urlencoded',
+// 		},
+// 		body: JSON.stringify(data)
+// 	}
+// 	fetch(coursesAPI, requestInfo)
+// 		.then(function(responses){
+// 			return responses.json();
+// 		})
+// 		.then(function(){
+// 			getCourse(courses_Render);
+// 		})
+// 	}
+// 	flag = false;
+
+//  }
+
+
+//  //DELETE
+//  function deleteCourse(id){
+// 	var request = {
+// 		method:"DELETE",
+// 		headers: {
+// 			'Content-Type': 'application/json'
+// 			// 'Content-Type': 'application/x-www-form-urlencoded',
+// 		}
+// 	}
+// 	fetch(coursesAPI + '/' + id, request)
+// 		.then(function(responses){
+// 			return responses.json();
+// 		})
+// 		.then(function(){
+// 			var element = document.querySelector('.course-item-' + id);
+// 			element.remove();
+// 			getCourse(courses_Render);
+// 		});
+//  }
+
+// //Update
+// function updateCourse(id){
+// 	getCourse(function(course){
+// 		var name = document.querySelector('input[name="name"]');
+// 		var description = document.querySelector('input[name="description"]');
+// 		for(var item of course){
+// 			if(item.id == id){
+// 				name.value = item.name;
+// 				description.value = item.description;
+// 			}
+// 		}
+// 		var createBTN = document.querySelector('#create_course');
+// 		createBTN.innerHTML = 'Lưu';
+// 		createBTN.removeEventListener('click', addCourse);
+// 		createBTN.onclick = function(){
+// 			var name = document.querySelector('input[name="name"]');
+// 		var description = document.querySelector('input[name="description"]');
+// 			var data = {
+// 				name:name.value,
+// 				description:description.value
+// 			}
+// 			console.log(data);
+// 			updateHandle(id,data)
+// 		}
+// 	})
+// }
+
+// // function update_Course(){
+// // 	updateCourse
+// // }
+// function updateHandle(id, data){
+// 	var request = {
+// 		method:"PATCH",
+// 		headers: {
+// 			'Content-Type': 'application/json'
+// 			// 'Content-Type': 'application/x-www-form-urlencoded',
+// 		},
+// 		body:JSON.stringify(data)
+// 	}
+// 	fetch(coursesAPI + '/' + id, request)
+// 		.then(function(responses){
+// 			return responses.json();
+// 		})	
+// 		.then(function(){
+// 			var createBTN = document.querySelector('#create_course');
+// 			createBTN.innerHTML = 'Thêm khóa học';
+// 			setTimeout(createBTN.onclick = function(){}, 2000);
+// 			createBTN.addEventListener('click', addCourse);
+// 			getCourse(courses_Render);
+// 		})
+// }
+
+// start()
+
+
+
+// let isSuccess = true;
+
+// if(true){
+// 	var a = 2;
+// 	isSuccess = false;
+// 	console.log(isSuccess);
+// }
+// console.log(a);
+
+
+
+//Template string(nội suy chuỗi)
+// var line1 = 'Học Javascript';
+// var line2 = 'Học PHP';
+// var line3 = `${line1}\n${line2}`;
+// console.log(line3);
+// // để sử dụng các kí tự đặc biết trong chuỗi ta phải thêm \kýtựcầnviết 
+// //thêm nháy kép \"data\"
+// //thêm flash: (gạch chéo): \\
+// //xuống dòng: \n
+
+// /* 
+// MultiLine-string:
+// */
+
+// const line = 'line1\nline2' + '\nline3' + '\nline4' + '\nline5';
+// console.log(line);
+
+
+
+
+//arrow function
+
+// var myFunc = () => console.log('Hello');
+// myFunc('Babel');
+
+// var myFunc2 = (a) => console.log(a);
+// myFunc2(2);
+
+// //hoặc trong trường hợp ta chỉ có một tham số truyền vào
+
+// var myFunc3 = log => console.log(log);
+// myFunc3('Javascript');
+
+// // code phía sau => sẽ được tự hiểu là return
+
+// //return về một object với callback function
+// var myObject = (a,b) => ({a:a, b:b});
+// console.log(myObject(3, 2));
+
+// var sum = (c, d) => c + d;
+
+// console.log(sum(3, 4));
+
+
+//Ngoài ra ta không thể sử dụng arrow function để tạo một contrustor hoặc tạo một phương thức trong object 
+// chúng ta không thể sử dụng arrow function để định nghĩa một function ( vd: function myFunc() );
+//chúng ta chỉ có thể dùng arrow function cho các function gán
+
+
+// var heading = document.querySelector('h1');
+// heading.onclick = function(e){
+// 	console.log(e);
+// }
+
+
+
+/* 
+Contrustor function
+*/
+
+
+// function Course(name, description, price){
+// this.name = name;
+// this.description = description;
+// this.price = price;
+// }
+
+// var course1 = new Course('Javascript', 'Khoa hoc Javascript', 2000);
+
+
+//Class trong es6 được hiểu như là cách viết khác của contrustor function
+// class Course {
+// 	constructor(name, description, price){ //class có một phương  thức gọi là contrustor function chứa các thuộc tính của class
+// 		this.name =name;
+// 		this.description = description;
+// 		this.price = price;
+// 	}
+
+// 	getName() { return this.name;}
+// 	getPrice() { return this.price;}
+
+// 	run() {
+// 		const a = 3;
+// 		const b = 2;
+// 		if(a > b){
+// 			return true;
+// 		} else return false;
+// 	}
+// }
+
+
+// var course = new Course('Javascript', 'Khoa hoc Javascript', 2000);
+// console.log(course);
+// console.log(course.getName());
+// console.log(course.run());
+
+
+/*
+ES6 
+Default parameter value: giá trị mặc định của tham số trong function
+trong function,sẽ có những lúc ta muốn một tham số truyền vào sẽ hiển thị một giá trị khác khi ta không truyền giá trị cho Nó
+
+*/
+
+// function getlog(log){
+// 	if(log === undefined){
+// 		log = 'Default values';
+// 	}
+// 	console.log(log);
+// }
+
+// getlog();
+//thay vì sử dụng cách trên, ta sẽ sử dụng default parameter value trong es6 như sau
+
+// function getLog2(log2 = 'Default values'){
+// 	console.log(2)
+// }
+
+// getLog2(2);
+
+// //ở trên: trong trường hợp ta không truyền đối số cho log2 hoặc đối số là undefined, thì log2 sẽ nhận giá trị là 'Default values'
+
+// // function getLog3(log, isAlert){
+// // 	if(isAlert){return alert(log);}
+// // 	console.log(log);
+// // }
+
+// // getLog3('MyMessage', true);
+
+// //ở ví dụ này: nếu ta truyền giá trị true là đối số 2 của tham số isAlert, thì Alert sẽ được thực thi
+// //nếu ta truyền vào false, thì code sẽ chỉ thực thi in ra giá trị log, chứ không hiển thị alert
+
+// function getLog4(log, type = 'log'){
+// 	console[type](log);
+// }
+
+// getLog4(2, 'warn');
+
+//ở ví dụ này, nếu ta không truyền đối số cho type . mặc định type sẽ là log => code bên trong sẽ là console[log](log), tương tự console.log(log)
+//nếu ta truyền vào warn thì sẽ là console.war(log) => sẽ in ra thông báo warn ở console
+
+
+/* 
+Khi nào thì dùng default parameter value: 
+với những tham số không bắt buộc phải truyền giá trị, thì ta sẽ set giá trị mặc định(default parameter value) cho nó
+với tham số bắt buộc phải truyền giá trị, thì ta không cần phải set default para meter cho nó(vì ta bắt buộc phải truyền cho nó)
+*/
+
+
+
+/* 
+Enhanced Object literals(ES6) / có thể hiểu là cách định nghĩa khác cho object(gon hơn thông thường)
+1: định nghĩa key, value cho bject (sử dụng trong trường hợp key nhận vào biến có cùng tên với key đó)
+2: định nghĩa phương thức(method) cho object 
+3: định nghĩa key cho object dưới dạng biến
+
+*/
+
+//định nghĩa một object theo cách thông thường
+//1: nhận vào biến có cùng tên với key
+
+// var nameCourse = 'Javascript';
+// var description = 'Khoa hoc Javascript';
+// var priceCourse = 'price';
+// var myObj = {
+// 	nameCourse: nameCourse,
+// 	description: description,
+// 	[priceCourse]: 1000,
+// 	getNameCourse: function(){
+// 		return this.nameCourse;
+// 	}
+// }
+
+// console.log(myObj.nameCourse, myObj.description, myObj.price, myObj.getNameCourse());
+//định nghĩa một object với Enhanced Object literal
+/* 
+1: định nghĩa key, value cho bject (sử dụng trong trường hợp key nhận vào biến có cùng tên với key đó)
+2: định nghĩa phương thức(method) cho object 
+3: định nghĩa key cho object dưới dạng biến
+*/
+
+// var nameCourse2 = 'PHP';
+// var description2 = 'Khoa hoc PHP';
+// var priceCourse2 = 'price2'
+// var myObj2 = {
+// 	nameCourse2,
+// 	description2,
+// 	[priceCourse2]: 1000,
+// 	getNameCourse(){
+// 		return this.nameCourse2;
+// 	}
+// }
+
+// console.log(myObj2.nameCourse2, myObj2.description2,myObj2.price2 ,myObj2.getNameCourse());
+
+//Định nghĩa một key của object bằng một biến
+
+
+// var myObj = {
+// 	name: 'Sơn Bành',
+// 	age: 18
+// }
+
+// for(var key in myObj){
+// 	console.log(myObj[key]);
+// }
+
+
+/* 
+Destructuring(Phân rã) - sử dụng cho array và object
+var myArray = [1, 2, 3, 4, 5];
+var [a, b, c, d, e] = myArray
+a, b, c, d, e sẽ tương ứng với các giá trị của mãng myArray
+nếu ta muốn bỏ phần tử đầu để lấy các phần tử còn lại [a, ...rest] => kết quả sẽ trả về mảng các phần tử còn lại ngoài trừ a
+rest: chỉ là tên biến và có thể thay thế bằng tên khác
+toán tử ...rest: là toán tử còn lại
+
+
+
+*/
+//sử dụng destructuring với array
+// var myArray = [1, 2, 3, 4, 5];
+// var [a, b, c, d, e] = myArray;
+// var [a, ... rest] = myArray;
+// console.log(a,b,c,d,e);
+// console.log(rest);
+
+// var myObj = {
+// 	nameUser: 'Sơn Bành',
+// 	price: 1000,
+// 	image: 'image-address',
+// 	secondObj: {
+// 		secondName: 'Sơn Đặng',
+// 		age: 18
+// 	}
+// }
+
+// var {nameUser, image, price, myNew} = myObj;
+
+// console.log(nameUser, image, price, myNew);
+
+// // vì object có các key nên ta phải lấy ra tên tương ứng với các key thì mới lấy được giá trị
+// // trường hợp ta khai báo một key không có trong object ở destructuring: thì key đó sẽ là undefined
+// //đổi tên cho một key trong destructuring oldname:newname
+// var {nameUser:newName, image:newImage, price:newPrice} = myObj;
+// console.log(newName, newImage, newPrice); // lúc này các name cũ sẽ không còn tồn tại và sẽ gây ra lỗi nếu ta in ra nó
+// //lấy ra key của một object con trong object chain
+// var {nameUser, image, price, secondObj: {secondName}, secondObj: {age}} = myObj //hoặc
+// var {nameUser, image, price, secondObj: {secondName, age}} = myObj
+// console.log(secondName, age);
+// // sử dụng toán tử ...rest với object
+// var {nameUser, ...rest} = myObj;
+// console.log(rest); // kết quả sẽ trả về một object là các key còn lại ngoài trừ key nameUser
+// //trả về một giá trị khác khi ta lấy ra một giá trị không có trong object 
+// var {nameUser, image, price, description = 'This key not exist in object' } = myObj
+// console.log(description);
+// //nếu key description có trong object và có giá trị thì nó sẽ lấy giá trị trong obj, nếu không thì là giá trị đã set default
+
+
+// /* 
+// phân biêt rest parameter và Spread khi dùng toán tử ...rest: là 
+// 1: khi toán tử ...rest được dùng với cấu trúc destructuring - thì sẽ gọi là rest parameter(toán tử rest)
+// 2: khi toán tử ...rest được dùng như là tham số cho một function thì gọi là rest parameter(toán tử rest)
+// các trường hợp khác gọi là Spread(toán tử spread)
+
+// //rest chỉ là tên biến, và có thể thay đổi bằng tên khác
+// */
+
+// //ví dụ về cách tạo ra một console log với toán tử ...rest 
+// function logger(...rest){
+// 	console.log(rest); // toán tử ...rest sẽ trả về mảng
+// }
+
+// console.log(logger(1, 2, 3, 4, 5, 6, 7, 8));
+
+
+
+// var googleLink = document.querySelector('a');
+// googleLink.onclick = function(event){
+// 	if(googleLink.href == 'https://www.google.com/'){
+// 		event.preventDefault();
+// 	}
+// }
+
+
+
+// class myCourse {
+// 	constructor(name, price, onsale) {
+// 		this.name = name;
+// 		this.price = price;
+// 		this.onsale = onsale;
+// 	}
+
+//  getName(){ return this.name; }
+//  getPrice(){ return this.price; }
+//  getOnsale(){ return this.onsale; }
+
+// }
+
+
+// var course1 = new myCourse('PHP', 1200, false);
+// console.log(course1.getName());
+
+
+
+// /* 
+// Phan biet rest parameter va Spread
+// toan tu ...rest duoc dung voi destructuring va duoc dinh nghia nhu tham so thi se duoc xem la rest parameter
+// cac truong hop khac thi goi la Spread
+// */
+// //ta co the dung toan tu ...rest parameter de nhan cac gia tri truyen vao ham
+// function logger(a,b, ...rest) {
+// 	console.log(rest);
+// 	console.log(a, b); // hoac bo qua 2 so 1, 2 => rest  la mot mang cac phan tu lai(3, 4, 5)
+// }
+
+// logger(1,2,3,4,5);
+
+// //lay ra cac key tu object truyen vao voi destructuring
+// function logger2({name, age, classMate, ...rest}) { //tuy vao doi so truyen vao la mang hay object ma ta su dung ngoac tuong ung o tham so
+// 	console.log(name, age, classMate); 
+// 	console.log(rest);
+
+// 	/* thay vi phai su dung 
+// 	thamso.name;
+// 	thamso.age;
+// 	thamso.classMate;
+
+// 	voi destructurting ta chi can lay ra key tuong ung cua obj truyen vao
+	
+// 	*/
+// }
+
+// logger2({name:'Son Banh', age: 18, classMate: '12A', isComplete: true, year: 1997})
+
+
+
+// function logger3([a, b, c, d, ...rest]) {
+//  console.log(a, b, c, d); // a, b, c, d = 1, 2, 3, 4;
+//  console.log(rest); // rest = [5, 6, 7];
+// }
+
+// logger3([1, 2, 3, 4, 5, 6, 7])
+
+
+// /* 
+// ========================================
+// toan tu rest(....) (da hoc)
+// toan tu spread(...)
+// spread: truyen di, trải ra
+
+// lợi ich của spread: 
+// Giúp ta nối các object, các arracy thanh một array, object mới
+// truyền  các phần tử của array như là đối số vào một function(bỏ qua việc get giá trị từ array hay object ra ngoài )
+// */
+
+// //nối 2 array
+
+// var array1 = [1, 2, 3, 4, 5, 6, 7, 8];
+
+// var array2 = ['a', 'b', 'c', 'd', 'e'];
+
+// var array3 = [...array1, ...array2];
+// console.log(array3);
+
+// /* 
+// ở đây ta có thể hiểu, các object hay array nào đứng sau toán tử spread(...) sẽ được hiểu là
+//  bỏ các dấu ngoặc của object hay array, và chỉ lấy các giá trị bên trong
+// */
+
+// //nối 2 object 
+
+
+// var fruit = {
+// 	fruitName: 'Mango',
+// 	fruitWeight: 500,
+// 	fruitPrice: 20000
+// }
+
+
+// var animal = {
+// 	animalName: 'cow',
+// 	animalWeight: 500,
+// 	animalPrice: 2000000
+// }
+
+
+// var mixObj = {
+// 	...fruit,
+// 	...animal
+// }
+
+// console.log(mixObj);
+// /* 
+// ngoài ra: khi ta định nghĩa các key giống tên ở các object nhưng khác giá trị: trình biên dịch sẽ tự động lấy
+// key phía sau của object(cuối cùng) là kết quả cuối cùng(overwrite)
+
+
+// điều này cũng tương tự như khi khai báo 2 function trùng tên, trình biên dịch sẽ overwrite function sau lên function đầu
+
+// */
+
+
+// //truyền đối số với toán tử Spread(...) trong function 
+
+// var resultObj = [1, 2, 3, 4, 5, 6];
+
+// function logger7(...rest) { // nếu ta dùng toán tử ... định nghĩa như là tham số(ví dụ ...rest): đây là rest parameter(toán tủ rest)
+// 	console.log(rest);
+// 	//kết hợp 2 toán tử  rest và spread, ta có thể nhận các phần tử từ mảng ngay lập tức
+// }
+
+
+// logger7(...resultObj); // nếu ta dùng toán tử ...  để truyền vào một đối số(đây gọi là spread)
+
+
+
+// var Array1 = [1, 2, 3, 4, 5, 6];
+// var Array2 = [7, 8, 9, 10];
+// var Array3 = [...Array1, ...Array2];
+// console.log(Array3);
+
+// var myObj1 = {
+// 	name: 'Son Banh',
+// 	age: 18
+// }
+
+// var myObj2 = {
+// 	fruit: 'Mango',
+// 	isSale: false
+// }
+
+// var myObj3 = {...myObj1, ...myObj2};
+// console.log(myObj3);
+
+// var myArray4 = [1, 2, 3, 4, 5, 6]
+
+// function logger({...rest}) {
+// 	// console.log(a, b);
+// 	console.log(rest);
+// }
+
+// logger({...myObj3});
+
+/* 
+===============================================
+tagged template literals
+
+*/
+
+// function highlight([first, ...strings], ...values) {
+// 	console.log(first)
+// 	console.log(strings);
+// 	console.log(values);
+// 	return values.reduce(
+// 		(acc, curr) => [...acc, `<span>${curr}</span>`, strings.shift()], [first]
+// 	).join('');
+// }
+
+// var course = 'Javascript';
+// var school = 'F8';
+
+// var html = highlight`Học Lập trình ${course} tại ${school} !`;
+
+// console.log(html);
+
+
+
+
+/* 
+
+
+===================================
+Modules(es6)
+Module có thể hiểu là khi chúng ta tách một phần của chức năng ra riêng 1 file để code, sau đó
+ta có thể import nó vào những file mà chúng ta cần để có thể sử dụng nó,
+
+để dùng được modle: trước hết, file script external được nạp vào html phải có một thuộc tính(attribute) là
+type="modules"
+
+
+Import và export
+ví dụ ta muốn Import một file(ví dụ file logger.js) vào file myscript.js ta đang đứng ở hiện tại,
+ta sẽ dùng import. và để ta có thể import được, thì file logger.js bắt buộc phải export ra giá trị gì đó
+
+nếu ta gặp lỗi: Uncaught SyntaxError: Cannot use import statement outside a module
+thì là do file js này ta đã nạp ở thẻ script của html chưa có thuộc tính(attribute) type="module"
+
+Uncaught SyntaxError: The requested module './logger.js' does not provide an export named 'default'
+Khi gặp lỗi này, là do ta chưa export gì ở file cần import
+
+
+Một file module chỉ có thể có duy nhất một export default (export default logger;), còn lại phải dùng export
+để lấy các giá trị từ export thường (export const typeError = 'error';)
+ta sẽ dùng destructuring: với {tên giá trị cần export}
+lưu ý tên giá trị(biến, function, v.v..) cần lấy phải giống với tên của giá trị cần lấy ở file module mà ta đã export
+
+import logger, {typeError, typeLog, typeWarn} from './logger.js'; //khi sử dụng export default ta sẽ lấy giá trị ra như thế này
+console.log(typeError, typeLog, typeWarn);
+logger('Hello', type);
+
+
+{typeError, typeLog, typeWarn}:  ở đây ta đã export ra các biến có name bên trong với default thường, nên khi lấy, ta chỉ cần thêm một destructuring
+với đúng tên biến mà ta đã export thì sẽ lấy được
+
+logger là giá trị ta nhận được với export default ở file module(một module chỉ có một export default và có vô hạn export)
+
+để lấy giá trị ở export default: import name from 'module.js';
+để lấy giá trị từ các export thường: import {name of export variable, function,v...} from 'module.js' (tên bên trong destructuring phải giống với tên các biến, function mà ta export ở module file)
+
+*/
+
+
+//ví dụ
+
+import logger from './logger.js'; //khi sử dụng export default ta sẽ lấy giá trị ra như thế này
+console.log(logger);
+logger('Hello')
+
+
+//logger ở đây chỉ là tên biến nhận vào giá trị export từ file ./logger.js
+//logger ở đây sẽ nhận giá trị từ hàm export default
+//tùy trường hợp mà ta đặt tên cho phù hợp với ngữ cảnh
+
+/* 
+trong trường hợp ta sử dụng export thường ỏ file cần import:
+ta sẽ dùng destructuring để lấy các giá trị được export thường
+*/
+
+// import {typeError, typeLog, typeWarn} from './logger.js'; // lấy các biến, function với export thường bằng destructuring
+
+// logger('Hello2',typeWarn);
+
+//hoặc trong trường hợp ta không muốn sử dụng destructuring, ta thể tạo một tên giả(alias) để nhận các biến từ export thường
+import * as myExportVariable from './logger.js';
+// ký tự * sẽ trả về một module  có tất cả các biến, function,... được export và export default
+console.log(myExportVariable);
+
+
+/* 
+giả sử ta muốn dùng một file mà trong đó không có export default(chỉ có sử dụng export)
+ta có phải contants.js chứa các biến mà ta export
+ta import các biến từ file contants.js vào file logger.js(có hàm logger được export default)
+ta tiếp tục import các biến từ file contants.js vào myscript.js
+*/
+
+import {
+	typeLog,
+	typeError,
+	typeWarn
+} from './contanst.js';
+
+import * as contants from './contanst.js';
+console.log(contants);
+
+logger('Test', typeWarn);
+
+//import một module từ một module khác
+/* 
+ta có folder testmodule chứa 2 module 
+1: callmessage.js
+2: message.js (module này export default ra một function)
+ý tưởng: ta sẽ dùng module callmessage.js để export default module message.js (xuất module message.js)
+ta sẽ import module callmessage.js để lấy được module message.js
+*/
+
+import showMessage from '../testmodule/callmessage.js';
+showMessage('this is function showMessage from module message.js!');
